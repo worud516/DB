@@ -1,0 +1,233 @@
+# 전체 데이터베이스 리스팅
+SHOW DATABASES;
+
+# `mysql` 데이터 베이스 선택
+USE mysql;
+
+# 테이블 리스팅
+SHOW TABLES;
+
+# `db` 테이블의 구조 확인
+#select * from user;
+DESC db;
+
+# 기존에 `board` 데이터베이스가 존재 한다면 삭제
+DROP DATABASE IF EXISTS board;
+
+# 새 데이터베이스(`board`) 생성
+CREATE DATABASE board;
+
+# 데이터베이스 추가 되었는지 확인
+SHOW DATABASES;
+
+# `board` 데이터 베이스 선택
+USE board;
+
+# 테이블 확인
+SHOW TABLES;
+
+
+
+
+
+
+
+# 게시물 테이블(`article`)을 만듭니다.
+CREATE TABLE article(
+title CHAR(100),
+`body` TEXT
+);
+
+# 잘 추가되었는지 확인
+SHOW TABLES;
+
+# 데이터 하나 추가
+INSERT INTO article 
+SET title = '안녕하세요.',
+`body` = '내용입니다.';
+
+# 제목 조회
+SELECT title
+FROM article;
+
+# 내용 조회
+SELECT `body`
+FROM article;
+
+# 제목, 내용 칼럼 데이터 조회
+SELECT title, `body`
+FROM article;
+
+# 내용, 제목 칼럼 데이터 조회
+SELECT `body`, title
+FROM article;
+
+# 모든 데이터 조회
+SELECT *
+FROM article;
+
+
+
+
+
+
+
+# 모든 데이터 베이스 조회
+SHOW DATABASES;
+
+# 만약 존재한다면 t1 데이터 베이스 삭제
+DROP DATABASE IF EXISTS t1;
+
+# t1 데이터 베이스 만들기
+CREATE DATABASE t1;
+
+# t1 데이터 베이스 선택
+USE t1;
+
+# article 테이블 만들기 (title, body)
+CREATE TABLE article(
+title CHAR(100),
+`body` TEXT
+);
+
+# title = '제목2', body = '내용2' 데이터 하나 추가
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용2';
+
+# title = '제목3', body = '내용3' 데이터 하나 추가
+INSERT INTO article
+SET title = '제목3',
+`body` = '내용3';
+
+# title = '제목1', body = '내용1' 데이터 하나 추가
+INSERT INTO article
+SET title = '제목1',
+`body` = '내용1';
+
+# 모든 데이터 조회
+SELECT *
+FROM article;
+
+# 모든 데이터 title로 오름차순 정렬 조회
+SELECT *
+FROM article
+ORDER BY title ASC;
+
+# 모든 데이터 title로 내림차순 정렬 조회
+SELECT *
+FROM article
+ORDER BY title DESC;
+
+# title = '제목2', body = '내용2' 데이터 하나 추가
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용2';
+
+# title = '제목2', body = '내용1' 데이터 하나 추가
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용1';
+
+# 모든 데이터 title 순으로 오름차순 정렬 조회
+SELECT *
+FROM article
+ORDER BY title ASC;
+
+# 모든 데이터 title 오름차순 `body` 오름차순 정렬 조회
+SELECT *
+FROM article
+ORDER BY title ASC, `body` ASC;
+
+# article 테이블 만들기 (칼럼은 제목, 내용만)
+CREATE TABLE article(
+title CHAR(100),
+`body` TEXT
+);
+
+# 제목1, 내용1 데이터 추가
+INSERT INTO article
+SET title = '제목1',
+`body` = '내용1';
+
+# 제목1, 내용1 데이터 또 하나 추가
+INSERT INTO article
+SET title = '제목1',
+`body` = '내용1';
+
+# 데이터 조회(게시물 구분 안됨)
+SELECT *
+FROM article;
+
+# 테이블 구조 수정(id 컬럼 추가) <-> 데이터 수정
+DESC article;
+
+ALTER TABLE article ADD COLUMN id INT;
+
+DESC article;
+
+# 데이터 조회(새로 생긴 id 칼럼의 값은 NULL) -> NULL => 데이터 없음, 정보 부재
+SELECT *
+FROM article;
+
+# 기존 데이터에 id값 추가
+UPDATE article SET id = 1;
+
+# 데이터 조회(둘다 수정되어 버림..)
+SELECT *
+FROM article;
+
+# 기존 데이터 중 1개만 id를 2로 변경
+SELECT *
+FROM article;
+
+UPDATE article SET id = 2
+LIMIT 1;
+
+# 데이터 조회
+SELECT *
+FROM article;
+
+# 데이터 1개 추가(제목2, 내용2)
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용2';
+
+# 데이터 조회
+SELECT *
+FROM article;
+
+UPDATE article SET id = 3;
+ORDER BY title DESC
+LIMIT 1;
+
+SELECT *
+FROM article;
+
+# 2번 게시물만 조회
+SELECT *
+FROM article
+WHERE id = 2;
+
+# 2번 게시물, 데이터 삭제 => DELETE
+DELETE FROM article
+WHERE id = 2;
+
+# 데이터 조회
+SELECT *
+FROM article;
+
+# 1번 게시물 제목을 제목2로 변경 => UPDATE
+SELECT *
+FROM article
+WHERE id = 1;
+
+UPDATE article
+SET title = '제목2'
+WHERE id = 1;
+
+# 모든 데이터 삭제
+DELETE FROM article;
+
+SELECT *
+FROM article;

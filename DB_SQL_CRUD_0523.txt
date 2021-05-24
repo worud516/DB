@@ -1,0 +1,418 @@
+# 모든 데이터 베이스 조회
+SHOW DATABASES;
+
+# 만약 존재한다면 t1 데이터 베이스 삭제
+DROP DATABASE IF EXISTS t1;
+
+# t1 데이터 베이스 만들기
+CREATE DATABASE t1;
+
+# t1 데이터 베이스 선택
+USE t1;
+
+# article 테이블 만들기 (id, title, body)
+CREATE TABLE article(
+id INT,
+title CHAR(100),
+`body` TEXT
+);
+
+# id = 1, title = '제목1', body = '내용1' 데이터 하나 추가
+SHOW TABLES;
+
+INSERT INTO article
+SET id = 1,
+title = '제목1',
+`body` = '내용1';
+
+# id = 2, title = '제목2', body = '내용2' 데이터 하나 추가
+INSERT INTO article
+SET id = 1,
+title = '제목2',
+`body` = '내용2';
+
+# id = 3, title = '제목3', body = '내용3' 데이터 하나 추가
+INSERT INTO article
+SET id = 3,
+title = '제목3',
+`body` = '내용3';
+
+# 아래 부터는 수정과 삭제가 이루어진 다음 select * from article을 이용해 결과를 확인해주세요.
+SELECT *
+FROM article;
+
+# 모든 게시물의 제목을 aaa로, 내용을 bbb로 변경
+SELECT title, `body`
+FROM article;
+
+UPDATE article
+SET title = 'aaa',
+`body` = 'bbb';
+
+# 1번 게시물만 조회
+SELECT id
+FROM article
+WHERE id = 1;
+
+# 1번 게시물의 제목을 제목1으로 변경
+UPDATE article
+SET title = '제목1';
+
+# 2번 게시물만 조회
+SELECT id
+FROM article
+WHERE id = 2;
+
+# 2번 게시물의 내용을 내용2으로 변경
+UPDATE article
+SET `body` = '내용2';
+
+# 3번 게시물만 조회
+SELECT id
+FROM article
+WHERE id = 3;
+
+# 3번 게시물의 제목을 제목3, 내용을 내용3으로 변경
+UPDATE article
+SET title = '제목3',
+`body` = '내용3';
+
+# 모든 게시물 데이터 삭제
+DELETE FROM article;
+
+# id = 1, title = '제목1', body = '내용1' 데이터 하나 추가
+SELECT *
+FROM article;
+
+INSERT INTO article
+SET id = 1,
+title = '제목1',
+`body` = '내용1';
+
+# id = 2, title = '제목2', body = '내용2' 데이터 하나 추가
+INSERT INTO article
+SET id = 2,
+title = '제목2',
+`body` = '내용2';
+
+# id = 3, title = '제목3', body = '내용3' 데이터 하나 추가
+INSERT INTO article
+SET id = 3,
+title = '제목3',
+`body` = '내용3';
+
+# id가 1인 게시물 삭제
+SELECT * FROM article WHERE id = 1;
+
+DELETE FROM article WHERE id = 1;
+
+SELECT * 
+FROM article;
+
+# 제목이 제목2인 게시물 삭제
+SELECT * FROM article WHERE title = '제목2';
+
+DELETE FROM article WHERE title = '제목2';
+
+SELECT * 
+FROM article;
+
+# 내용이 내용3인 게시물 삭제
+SELECT * FROM article WHERE `body` = '내용3';
+
+DELETE FROM article WHERE `body` = '내용3';
+
+SELECT * 
+FROM article;
+
+
+
+
+
+
+# 기존에 t1 데이터베이스가 존재 한다면 삭제
+DROP DATABASE IF EXISTS t1;
+
+# 새 데이터베이스(`t1`) 생성
+CREATE DATABASE t1;
+
+USE t1;
+
+# article 테이블 생성(칼럼은 id, title, body)
+CREATE TABLE article(
+id INT,
+title CHAR(100),
+`body` TEXT
+);
+
+# id 없는 테스트 데이터 등록
+INSERT INTO article
+SET title = '제목1',
+`body` = '내용1';
+
+# 데이터 조회
+SELECT *
+FROM article;
+
+# id가 NULL인 데이터 생성이 가능하네?
+# id 데이터는 꼭 필수 이기 때문에 NULL을 허용하지 않게 바꾼다.
+# 기존의 NULL값 때문에 경고가 뜬다.
+# 기존의 NULL값이 0으로 바뀐다.
+
+#alter table article add column 칼럼명 자료형 -> 컬럼 추가
+ALTER TABLE article MODIFY COLUMN id INT NOT NULL;
+
+SELECT *
+FROM article;
+
+# id 없는 테스트 데이터 등록
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용2';
+
+SELECT *
+FROM article;
+
+# 키 등록
+# 생각해 보니 모든 행(row)의 id 값은 유니크 해야한다.
+# alter를 이용해 id 칼럼의 옵션에 null 허용하지 않음과 유니크 옵션 붙이기.
+
+ALTER TABLE article MODIFY COLUMN id INT NOT NULL UNIQUE;
+
+# id 중복 제거
+# 오류가 난다. 왜냐하면 기존의 데이터 중에서 중복되는 값이 있다.
+
+# update를 이용해서 id값을 중복 제거.
+SELECT *
+FROM article;
+
+UPDATE article
+SET id = 1
+LIMIT 1;
+
+UPDATE article
+SET id = 2
+WHERE title = '제목2';
+
+UPDATE article
+SET id = 3
+WHERE title = '제목1'AND id = 2;
+
+ALTER TABLE article MODIFY COLUMN id INT NOT NULL UNIQUE;
+
+INSERT INTO article
+SET id = 3,
+title = 'a',
+`body` = 'b';
+
+DESC article;
+
+# 테이블 생성시 주키(primary key) 등록 not null + unique = primary key
+DROP TABLE article;
+
+CREATE TABLE article(
+id INT,
+title CHAR(100) NOT NULL,
+`body` TEXT NOT NULL,
+PRIMARY KEY(id)
+);
+
+DESC article;
+
+# id 없는 테스트 데이터 2개 등록
+INSERT INTO article
+SET id = 1,
+title = 'aaa',
+`body` = 'bbb';
+
+SELECT *
+FROM article;
+
+DELETE FROM article;
+
+# 자동 증가 제약 (AUTO_INCREMENT)
+ALTER TABLE article MODIFY id INT AUTO_INCREMENT;
+
+DESC article;
+
+INSERT INTO article
+SET title = 'aaa',
+`body` = 'bbb';
+
+SELECT *
+FROM article;
+
+
+
+
+# 나머지 모든 컬럼에 not null 제약 걸기
+ALTER TABLE article MODIFY title CHAR(100) NOT NULL;
+ALTER TABLE article MODIFY `body` TEXT NOT NULL;
+
+# default 제약 걸기
+INSERT INTO article
+SET `body` = 'dfdf';
+
+ALTER TABLE article MODIFY title CHAR(100) NOT NULL DEFAULT 'abc';
+
+SELECT *
+FROM article;
+
+INSERT INTO article
+SET `body` = 'dfdf';
+
+# -21억~21억
+# id에 unsigned 제약 걸기 -> int :
+ALTER TABLE article MODIFY id INT UNSIGNED AUTO_INCREMENT;
+
+DESC article;
+
+# 작성자(writer) 칼럼을 title 칼럼 다음에 추가.
+ALTER TABLE article ADD writer CHAR(30);
+
+DESC article;
+
+SELECT *
+FROM article;
+
+# 작성자(writer) 칼럼의 이름을 nickname 으로 변경.
+ALTER TABLE article CHANGE writer nickname CHAR(30);
+
+# nickname 칼럼의 위치를 title 밑으로 보내주세요.
+ALTER TABLE article MODIFY nickname CHAR(30) AFTER title;
+
+# hit 조회수 칼럼을 가장 앞에 추가.
+ALTER TABLE article ADD hit INT FIRST;
+
+SELECT *
+FROM article;
+
+# hit 컬럼을 삭제
+ALTER TABLE article DROP hit;
+
+# nickname 컬럼을 삭제
+ALTER TABLE article DROP nickname;
+
+SELECT *
+FROM article;
+
+# 테스트 데이터 추가
+DROP DATABASE IF EXISTS t1;
+
+CREATE DATABASE t1;
+
+USE t1;
+
+CREATE TABLE article(
+id INT UNSIGNED AUTO_INCREMENT,
+title CHAR(100) NOT NULL,
+`body` TEXT NOT NULL,
+nickname CHAR(30) NOT NULL,
+hit INT NOT NULL,
+PRIMARY KEY(id)
+);
+
+SELECT *
+FROM article;
+
+
+INSERT INTO article
+SET title = '제목1',
+`body` = '내용1',
+nickname = '유저1',
+hit = 20;
+
+INSERT INTO article
+SET title = '제목2',
+`body` = '내용2',
+nickname = '유저2',
+hit = 30;
+
+INSERT INTO article
+SET title = '제목3',
+`body` = '내용3',
+nickname = '유저3',
+hit = 10;
+
+# 데이터 추가
+INSERT INTO article
+SET title = '제목4',
+`body` = '내용4',
+nickname = '유저4',
+hit = 55;
+
+# 데이터 추가
+INSERT INTO article
+SET title = '제목5',
+`body` = '내용5',
+nickname = '유저5',
+hit = 10;
+
+# 데이터 추가
+INSERT INTO article
+SET title = '제목6',
+`body` = '내용6',
+nickname = '유저6',
+hit = 100;
+
+
+SELECT *
+FROM article;
+
+# 조회수 가장 많은 게시물 3개 만 보여주세요., 힌트 : ORDER 
+SELECT *
+FROM article
+ORDER BY hit DESC
+LIMIT 3;
+
+# 작성자명이 '1'을 포함하는 게시물만 보여주세요., 힌트 : LIKE
+SELECT *
+FROM article
+WHERE nickname LIKE '%1%';
+
+# 조회수가 10 이상 55 이하 인것만 보여주세요., 힌트 : AND
+SELECT *
+FROM article
+WHERE hit >= 10 AND hit <= 55;
+
+SELECT *
+FROM article
+WHERE hit BETWEEN 10 AND 55;
+
+# 작성자가 '유저1' 이거나 조회수가 55 이상인 게시물을 보여주세요. 힌트 : OR
+SELECT *
+FROM article
+WHERE nickname = '유저1' OR hit >= 55;
+
+
+# 작성자가 '유저1'이 아니고 조회수가 50 이하인 것만 보여주세요., 힌트 : !=
+SELECT *
+FROM article
+WHERE nickname != '유저1' AND hit <= 50;
+
+# id가 2, 5, 6인 것만 보여주세요.
+SELECT *
+FROM article
+WHERE id = 2 OR id = 5 OR id = 6;
+
+SELECT *
+FROM article
+WHERE id IN (2, 5, 6);
+
+# 제목이 '제목1'이 아닌것만 보여주세요.
+SELECT *
+FROM article
+WHERE title != '제목1';
+
+SELECT *
+FROM article
+WHERE NOT title = '제목1';
+
+# 제목이 '제목1', '제목3', '제목5'가 아닌것만 보여주세요.
+SELECT *
+FROM article
+WHERE title != '제목1' AND title != '제목3' AND title != '제목5';
+
+SELECT *
+FROM article
+WHERE title NOT IN('제목1', '제목3', '제목5');
