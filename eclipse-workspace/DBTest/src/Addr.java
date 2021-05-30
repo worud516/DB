@@ -2,8 +2,8 @@ public class Addr {
 	private int id;
 	private String name;
 	private String addr;
-	private String phone;
-
+	private String phone;	
+	
 	// Getter, Setter
 	public void setId(int id) {
 		this.id = id;
@@ -35,5 +35,5 @@ public class Addr {
 
 	public int getId() {
 		return id;
-	}
+	}	
 }

@@ -13,6 +13,6 @@ public class View {
 			System.out.println("ÀüÈ­ : " + a.getPhone());
 			System.out.println("===================");
 		}
-
+		
 	}
 }
