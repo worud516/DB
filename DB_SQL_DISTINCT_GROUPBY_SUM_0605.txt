@@ -1,0 +1,46 @@
+1. 손흥민의 주문 개수는? 3
+SELECT COUNT(*)
+FROM t_order
+INNER JOIN t_user
+ON t_order.userNo = t_user.id
+INNER JOIN t_product
+ON t_order.productNo = t_product.id
+WHERE t_user.userName = '손흥민';
+
+2. 손흥민이 산 상품은? 운동화2, 코트1
+SELECT DISTINCT userName, t_product.id, pname
+FROM t_order
+INNER JOIN t_user
+ON t_order.userNo = t_user.id
+INNER JOIN t_product
+ON t_order.productNo = t_product.id
+WHERE userName = '손흥민';
+
+3. 스커트를 산 사람은? 송혜교
+SELECT DISTINCT userName
+FROM t_order
+INNER JOIN t_user
+ON t_order.userNo = t_user.id
+INNER JOIN t_product
+ON t_order.productNo = t_product.id
+WHERE pname = '스커트';
+
+4. 가장 많이 주문한 사람의 아이디와 이름, 주문개수는? 손흥민
+SELECT userName, COUNT(userId) cnt
+FROM t_order
+INNER JOIN t_user
+ON t_order.userNo = t_user.id
+INNER JOIN t_product
+ON t_order.productNo = t_product.id
+GROUP BY userId
+ORDER BY cnt DESC
+LIMIT 1;
+
+5. 소지섭이 사용한 총 금액은? 130000 - 집계함수(한 컬럼을 정해서 그 컬럼의 모든행을 계산 함수) sum(숫자컬럼)
+SELECT SUM(price) price
+FROM t_order
+INNER JOIN t_user
+ON t_order.userNo = t_user.id
+INNER JOIN t_product
+ON t_order.productNo = t_product.id
+WHERE userName = '소지섭'
