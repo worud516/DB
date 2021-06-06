@@ -1,0 +1,80 @@
+﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+-- member Table Create SQL
+CREATE TABLE member
+(
+    `id`          INT         NOT NULL    AUTO_INCREMENT COMMENT '회원번호', 
+    `loginId`     CHAR(30)    NULL        COMMENT '회원아이디', 
+    `loginPw`     CHAR(30)    NULL        COMMENT '회원비밀번호', 
+    `memberName`  CHAR(30)    NULL        COMMENT '회원이름', 
+    `nickname`    CHAR(30)    NULL        COMMENT '회원닉네임', 
+    `regDate`     DATETIME    NULL        COMMENT '등록날짜', 
+    CONSTRAINT  PRIMARY KEY (id)
+);
+
+ALTER TABLE member COMMENT '회원';
+
+
+-- article Table Create SQL
+CREATE TABLE article
+(
+    `id`        INT          NOT NULL    AUTO_INCREMENT COMMENT '게시물번호', 
+    `regDate`   DATETIME     NULL        COMMENT '등록날짜', 
+    `title`     CHAR(100)    NULL        COMMENT '제목', 
+    `body`      TEXT         NULL        COMMENT '내용', 
+    `boardId`   INT          NULL        COMMENT '게시판구분', 
+    `memberId`  INT          NULL        COMMENT '회원번호', 
+    `writer`    CHAR(30)     NULL        COMMENT '비회원작성자', 
+    `passwd`    CHAR(30)     NULL        COMMENT '비회원비밀번호', 
+    `hit`       INT          NULL        COMMENT '조회수', 
+    CONSTRAINT  PRIMARY KEY (id)
+);
+
+ALTER TABLE article COMMENT '게시물';
+
+ALTER TABLE article
+    ADD CONSTRAINT FK_article_memberId_member_id FOREIGN KEY (memberId)
+        REFERENCES member (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- board Table Create SQL
+CREATE TABLE board
+(
+    `id`         INT         NOT NULL    AUTO_INCREMENT COMMENT '게시판번호', 
+    `regDate`    DATETIME    NULL        COMMENT '등록날짜', 
+    `boardName`  CHAR(30)    NULL        COMMENT '게시판이름', 
+    CONSTRAINT  PRIMARY KEY (id)
+);
+
+ALTER TABLE board COMMENT '게시판';
+
+
+-- articleReply Table Create SQL
+CREATE TABLE articleReply
+(
+    `id`         INT            NOT NULL    AUTO_INCREMENT COMMENT '댓글번호', 
+    `regDate`    VARCHAR(45)    NULL        COMMENT '등록날짜', 
+    `body`       CHAR(200)      NULL        COMMENT '댓글내용', 
+    `boardId`    INT            NULL        COMMENT '게시판번호', 
+    `articleId`  INT            NULL        COMMENT '게시물번호', 
+    `memberId`   INT            NULL        COMMENT '작성자번호', 
+    `writer`     CHAR(30)       NULL        COMMENT '비회원작성자', 
+    `passwd`     CHAR(30)       NULL        COMMENT '비회원비밀번호', 
+    CONSTRAINT  PRIMARY KEY (id)
+);
+
+ALTER TABLE articleReply COMMENT '댓글';
+
+ALTER TABLE articleReply
+    ADD CONSTRAINT FK_articleReply_memberId_member_id FOREIGN KEY (memberId)
+        REFERENCES member (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE articleReply
+    ADD CONSTRAINT FK_articleReply_articleId_article_id FOREIGN KEY (articleId)
+        REFERENCES article (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE articleReply
+    ADD CONSTRAINT FK_articleReply_boardId_board_id FOREIGN KEY (boardId)
+        REFERENCES board (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
