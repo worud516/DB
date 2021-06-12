@@ -1,0 +1,83 @@
+SELECT *
+FROM article; 
+
+SELECT *
+FROM articlereply;
+
+SELECT *
+FROM board;
+
+SELECT *
+FROM `member`;
+
+
+# 모든 게시물의 개수 - count
+
+SELECT COUNT(*)
+FROM article;
+
+
+# 모든 게시물의 조회수의 총합을 조회 - sum
+
+UPDATE article 
+SET hit = 10;
+
+SELECT *
+FROM article;
+
+SELECT SUM(hit)
+FROM article;
+
+
+# 모든 게시물의 개수
+
+SELECT COUNT(*)
+FROM article;
+ 
+
+# 모든 게시물의 조회수의 총합을 조회
+SELECT SUM(hit)
+FROM article;
+ 
+
+
+# 각 게시물 별 댓글 수(없으면 0개라고 표시)
+
+SELECT b.name boardName, a.id articleId, a.title, COUNT(ar.id) repl_cnt
+FROM articleReply ar
+RIGHT OUTER JOIN article a
+ON ar.articleId = a.id
+INNER JOIN board b
+ON a.boardId = b.id
+GROUP BY a.boardId, a.id
+ORDER BY a.id;
+
+ 
+## 출력양식 : 회원 번호, 회원 아이디, 회원 이름, 댓글 개수
+
+# 각 회원별 게시물 수(없으면 0개라고 표시)
+
+SELECT m.id, m.loginId, m.name, COUNT(a.id) articleCnt
+FROM MEMBER m
+LEFT JOIN article a
+ON m.id = a.memberId
+GROUP BY m.id;
+
+ 
+
+# 각 회원별 댓글 수(없으면 0개라고 표시)
+
+SELECT m.id, m.loginId, m.name, COUNT(ar.id) replyCnt
+FROM MEMBER m
+LEFT JOIN articleReply ar
+ON m.id = ar.memberId
+GROUP BY m.id;
+
+
+# 각 회원별 게시물의 조회수 총합(없으면 0개라고 표시)
+
+SELECT m.id, m.loginId, m.name, SUM(a.hit) hitSum
+FROM MEMBER m
+LEFT JOIN article a
+ON m.id = a.memberId
+GROUP BY m.id;
