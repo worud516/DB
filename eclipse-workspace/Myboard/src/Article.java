@@ -1,5 +1,6 @@
 
 public class Article {
+
 	private int id;
 	private String regDate;
 	private String title;
@@ -11,8 +12,11 @@ public class Article {
 	private int hit;
 	private String name;
 
-	public Article(int id, String regDate, String title, String body, String name, int hit) {
+	// id, title, body, regDate, name, hit
+
+	public Article(int boardId, int id, String regDate, String title, String body, String name, int hit) {
 		super();
+		this.boardId = boardId;
 		this.id = id;
 		this.regDate = regDate;
 		this.title = title;
