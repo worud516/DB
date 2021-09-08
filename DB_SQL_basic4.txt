@@ -1,0 +1,124 @@
+# a6 DB 삭제/생성/선택
+DROP DATABASE IF EXISTS a6;
+CREATE DATABASE a6;
+USE a6;
+
+# 부서(홍보, 기획, IT)
+CREATE TABLE dept (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    `name` CHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO dept
+SET regDate = NOW(),
+`name` = '홍보';
+
+INSERT INTO dept
+SET regDate = NOW(),
+`name` = '기획';
+
+INSERT INTO dept
+SET regDate = NOW(),
+`name` = 'IT';
+
+# 사원(홍길동/홍보/5000만원, 홍길순/홍보/6000만원, 임꺽정/기획/4000만원)
+## IT부서는 아직 사원이 없음
+CREATE TABLE emp (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    `name` CHAR(100) NOT NULL,
+    deptId INT(10) UNSIGNED NOT NULL,
+    salary INT(10) UNSIGNED NOT NULL
+);
+
+INSERT INTO emp
+SET regDate = NOW(),
+`name` = '홍길동',
+deptId = 1,
+salary = 5000;
+
+INSERT INTO emp
+SET regDate = NOW(),
+`name` = '홍길순',
+deptId = 1,
+salary = 6000;
+
+INSERT INTO emp
+SET regDate = NOW(),
+`name` = '임꺽정',
+deptId = 2,
+salary = 4000;
+
+# 전 사원에 대하여, [부서명, 사원번호, 사원명] 양식으로 출력
+SELECT D.name AS `부서명`,
+E.id AS `사원번호`,
+E.name AS `사원명`
+FROM emp AS E
+INNER JOIN dept AS D
+ON E.deptId = D.id;
+
+# 전 사원에 대하여, [부서명, 사원번호, 사원명] 양식으로 출력
+## IT부서는 [IT, NULL, NULL] 으로 출력
+SELECT D.name AS `부서명`,
+E.id AS `사원번호`,
+E.name AS `사원명`
+FROM dept AS D LEFT JOIN emp AS E 
+ON E.deptId = D.id;
+
+# 전 사원에 대하여, [부서명, 사원번호, 사원명] 양식으로 출력
+## IT부서는 [IT, 0, -] 으로 출력
+## IT부서는 [IT, NULL, NULL] 으로 출력
+SELECT D.name AS `부서명`,
+IF(E.id IS NOT NULL, E.id, 0) AS `사원번호`,
+IFNULL(E.name, "-") AS `사원명`
+FROM dept AS D LEFT JOIN emp AS E 
+ON E.deptId = D.id;
+
+# 모든 부서별, 최고연봉, IT부서는 0원으로 표시
+SELECT D.name AS `부서명`,
+MAX(IFNULL(E.salary, 0)) AS `최고연봉`
+FROM dept AS D
+LEFT JOIN emp AS E
+ON D.id = E.deptId
+GROUP BY D.id;
+
+# 모든 부서별, 최저연봉, IT부서는 0원으로 표시
+SELECT D.name AS `부서명`,
+MIN(IFNULL(E.salary, 0)) AS `최고연봉`
+FROM dept AS D
+LEFT JOIN emp AS E
+ON D.id = E.deptId
+GROUP BY D.id;
+
+# 모든 부서별, 평균연봉, IT부서는 0원으로 표시
+SELECT D.name AS `부서명`,
+AVG(IFNULL(E.salary, 0)) AS `최고연봉`
+FROM dept AS D
+LEFT JOIN emp AS E
+ON D.id = E.deptId
+GROUP BY D.id;
+
+# 하나의 쿼리로 최고액연봉자와 최저역연봉자의 이름과 연봉
+(
+    SELECT E.salary, 
+    E.name,
+    '최고연봉자' AS `타입`
+    FROM emp AS E
+    ORDER BY E.salary DESC
+    LIMIT 1
+)
+UNION ALL
+(
+    SELECT E.salary AS `연봉`, 
+    E.name AS `사원명`,
+    '최저연봉자' AS `타입`
+    FROM emp AS E
+    ORDER BY E.salary ASC
+    LIMIT 1
+)
+ORDER BY `타입` ASC
+
+
+
+
